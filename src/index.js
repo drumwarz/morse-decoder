@@ -39,6 +39,38 @@ const MORSE_TABLE = {
 
 function decode(expr) {
     // write your solution here
+    const splitedExpr = expr.split('');
+    let stash = [];
+    let result = []
+  
+    function recursion(startIndex, endIndex) {
+      stash = []
+  
+      if (startIndex === expr.length) return;
+  
+      for (let i = startIndex; i < endIndex; i = i + 2) {
+  
+        if (splitedExpr[i] + splitedExpr[i + 1] === '10') stash.push('.');
+  
+        if (splitedExpr[i] + splitedExpr[i + 1] === '11') stash.push('-');
+  
+        if (splitedExpr[i] === '*') {
+          result.push(' ');
+          return recursion(startIndex + 10, endIndex + 10);
+        }
+      }
+  
+      for (key in MORSE_TABLE) {
+        if (key === stash.join('')) {
+          result.push(MORSE_TABLE[key])
+        } 
+      }
+      recursion(startIndex + 10, endIndex + 10)
+    }
+  
+    recursion(0, 10)
+  
+    return result.join('')
 }
 
 module.exports = {
